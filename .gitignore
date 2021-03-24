@@ -40,4 +40,5 @@ admin.env
 .env
 _meta
 .serverless
+.webpack
 lib
