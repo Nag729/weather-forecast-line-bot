@@ -1,0 +1,506 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "HelloLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/weather-forecast-line-bot-dev-hello"
+      }
+    },
+    "NotifyLineLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/weather-forecast-line-bot-dev-notifyLine"
+      }
+    },
+    "ReceiveWeatherInfoLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/weather-forecast-line-bot-dev-receiveWeatherInfo"
+      }
+    },
+    "HelloLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/weather-forecast-line-bot/dev/1616566302500-2021-03-24T06:11:42.500Z/weather-forecast-line-bot.zip"
+        },
+        "Handler": "src/functions/hello/handler.main",
+        "Runtime": "nodejs14.x",
+        "FunctionName": "weather-forecast-line-bot-dev-hello",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "TZ": "Asia/Tokyo",
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "MY_AWS_REGION": "ap-northeast-1",
+            "ONE_CALL_API_KEY": "82db215e674bdd250b933ebf63f827f7",
+            "LINE_CHANNEL_ACCESS_TOKEN": "9BtOdCQ0rvijwAUUNDZRsM+AZqwH7dyJKs+aw1l0ZaEHQOAkLTNdDCSv+7yZUTin8PQ9vZ5lFMtiFWhAcaVY1DBbA9KJ3txpa965tun6PO9luUd/qjW4H5Umz2+0ITq8aVI12pDkFCg4YOTQq8R9OAdB04t89/1O/w1cDnyilFU=",
+            "MEASUREMENT_LATITUDE": "35.62913147168608",
+            "MEASUREMENT_LONGITUDE": "139.73877832237912"
+          }
+        },
+        "Role": "arn:aws:iam::435415521124:role/lambda-weather-forecast-line-bot-role"
+      },
+      "DependsOn": [
+        "HelloLogGroup"
+      ]
+    },
+    "NotifyLineLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/weather-forecast-line-bot/dev/1616566302500-2021-03-24T06:11:42.500Z/weather-forecast-line-bot.zip"
+        },
+        "Handler": "src/functions/notify-line/handler.main",
+        "Runtime": "nodejs14.x",
+        "FunctionName": "weather-forecast-line-bot-dev-notifyLine",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "TZ": "Asia/Tokyo",
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "MY_AWS_REGION": "ap-northeast-1",
+            "ONE_CALL_API_KEY": "82db215e674bdd250b933ebf63f827f7",
+            "LINE_CHANNEL_ACCESS_TOKEN": "9BtOdCQ0rvijwAUUNDZRsM+AZqwH7dyJKs+aw1l0ZaEHQOAkLTNdDCSv+7yZUTin8PQ9vZ5lFMtiFWhAcaVY1DBbA9KJ3txpa965tun6PO9luUd/qjW4H5Umz2+0ITq8aVI12pDkFCg4YOTQq8R9OAdB04t89/1O/w1cDnyilFU=",
+            "MEASUREMENT_LATITUDE": "35.62913147168608",
+            "MEASUREMENT_LONGITUDE": "139.73877832237912"
+          }
+        },
+        "Role": "arn:aws:iam::435415521124:role/lambda-weather-forecast-line-bot-role"
+      },
+      "DependsOn": [
+        "NotifyLineLogGroup"
+      ]
+    },
+    "ReceiveWeatherInfoLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/weather-forecast-line-bot/dev/1616566302500-2021-03-24T06:11:42.500Z/weather-forecast-line-bot.zip"
+        },
+        "Handler": "src/functions/receive-weather-info/handler.main",
+        "Runtime": "nodejs14.x",
+        "FunctionName": "weather-forecast-line-bot-dev-receiveWeatherInfo",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "TZ": "Asia/Tokyo",
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "MY_AWS_REGION": "ap-northeast-1",
+            "ONE_CALL_API_KEY": "82db215e674bdd250b933ebf63f827f7",
+            "LINE_CHANNEL_ACCESS_TOKEN": "9BtOdCQ0rvijwAUUNDZRsM+AZqwH7dyJKs+aw1l0ZaEHQOAkLTNdDCSv+7yZUTin8PQ9vZ5lFMtiFWhAcaVY1DBbA9KJ3txpa965tun6PO9luUd/qjW4H5Umz2+0ITq8aVI12pDkFCg4YOTQq8R9OAdB04t89/1O/w1cDnyilFU=",
+            "MEASUREMENT_LATITUDE": "35.62913147168608",
+            "MEASUREMENT_LONGITUDE": "139.73877832237912"
+          }
+        },
+        "Role": "arn:aws:iam::435415521124:role/lambda-weather-forecast-line-bot-role"
+      },
+      "DependsOn": [
+        "ReceiveWeatherInfoLogGroup"
+      ]
+    },
+    "HelloLambdaVersionjJFoTgKnibCR4yHIDzkJyLsptbUbY2XLIqpQiJl6ruE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "HelloLambdaFunction"
+        },
+        "CodeSha256": "xUjEqYLZMzQB8hw2UB3DQ1adj75rtq93q8K4oCdI6PU="
+      }
+    },
+    "NotifyLineLambdaVersionXw2QdzLoFHnPNmIM6ByYcCWA9hOQXm0SmFTQ1QUD9Wc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "NotifyLineLambdaFunction"
+        },
+        "CodeSha256": "xUjEqYLZMzQB8hw2UB3DQ1adj75rtq93q8K4oCdI6PU="
+      }
+    },
+    "ReceiveWeatherInfoLambdaVersionu6s9WqmKURd5zLQFnvpr77qVkQoX5tD30WQexXyNwI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ReceiveWeatherInfoLambdaFunction"
+        },
+        "CodeSha256": "xUjEqYLZMzQB8hw2UB3DQ1adj75rtq93q8K4oCdI6PU="
+      }
+    },
+    "ReceiveWeatherInfoEventsRuleSchedule1": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "ScheduleExpression": "cron(0 0 * * ? *)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "ReceiveWeatherInfoLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": "receiveWeatherInfoSchedule"
+          }
+        ]
+      }
+    },
+    "ReceiveWeatherInfoLambdaPermissionEventsRuleSchedule1": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ReceiveWeatherInfoLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "ReceiveWeatherInfoEventsRuleSchedule1",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "ApiGatewayRestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "weather-forecast-line-bot-dev",
+        "EndpointConfiguration": {
+          "Types": [
+            "EDGE"
+          ]
+        },
+        "Policy": "",
+        "MinimumCompressionSize": 1024
+      }
+    },
+    "ApiGatewayResourceHello": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "hello",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodHelloPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceHello"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "HelloLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [],
+        "RequestValidatorId": {
+          "Ref": "ApiGatewayHelloModelValidator"
+        },
+        "RequestModels": {
+          "application/json": {
+            "Ref": "ApiGatewayMethodHelloPostApplicationJsonModel"
+          }
+        }
+      }
+    },
+    "ApiGatewayMethodHelloPostApplicationJsonModel": {
+      "Type": "AWS::ApiGateway::Model",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ContentType": "application/json",
+        "Schema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      }
+    },
+    "ApiGatewayHelloModelValidator": {
+      "Type": "AWS::ApiGateway::RequestValidator",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ValidateRequestBody": true,
+        "ValidateRequestParameters": true
+      }
+    },
+    "ApiGatewayDeployment1616566287216": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "StageName": "dev"
+      },
+      "DependsOn": [
+        "ApiGatewayMethodHelloPost"
+      ]
+    },
+    "HelloLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "HelloLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "NotifyLineEventSourceMappingDynamodbUsersTable": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [],
+      "Properties": {
+        "BatchSize": 50,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "usersTable",
+            "StreamArn"
+          ]
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "NotifyLineLambdaFunction",
+            "Arn"
+          ]
+        },
+        "StartingPosition": "LATEST",
+        "Enabled": true,
+        "MaximumBatchingWindowInSeconds": 10
+      }
+    },
+    "usersTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "weatherHourlyTable",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "dt",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "dt",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        },
+        "StreamSpecification": {
+          "StreamViewType": "NEW_IMAGE"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "HelloLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "HelloLambdaVersionjJFoTgKnibCR4yHIDzkJyLsptbUbY2XLIqpQiJl6ruE"
+      }
+    },
+    "NotifyLineLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "NotifyLineLambdaVersionXw2QdzLoFHnPNmIM6ByYcCWA9hOQXm0SmFTQ1QUD9Wc"
+      }
+    },
+    "ReceiveWeatherInfoLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ReceiveWeatherInfoLambdaVersionu6s9WqmKURd5zLQFnvpr77qVkQoX5tD30WQexXyNwI"
+      }
+    },
+    "ServiceEndpoint": {
+      "Description": "URL of the service endpoint",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ApiGatewayRestApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/dev"
+          ]
+        ]
+      }
+    }
+  }
+}
