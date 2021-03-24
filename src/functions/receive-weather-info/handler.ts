@@ -1,10 +1,11 @@
+import { middyfy } from "@libs/lambda";
+import "source-map-support/register";
+import Weather from "./../Weather";
+
 const AWS = require("aws-sdk");
 AWS.config.update({ region: process.env.MY_AWS_REGION });
 const docCLI = new AWS.DynamoDB.DocumentClient();
 
-import "source-map-support/register";
-import { middyfy } from "../../libs/lambda"; // TODO: `@libs` で参照できない問題
-import Weather from "./../Weather";
 const weather = new Weather();
 
 const handler = async () => {

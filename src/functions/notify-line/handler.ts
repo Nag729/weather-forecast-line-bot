@@ -1,6 +1,6 @@
+import { middyfy } from "@libs/lambda";
 import axios from "axios";
 import "source-map-support/register";
-import { middyfy } from "../../libs/lambda"; // TODO: `@libs` で参照できない問題
 import Weather from "../Weather";
 import { Hourly } from "./../../../types/Weather";
 
