@@ -60,11 +60,13 @@ export default class Weather {
         .utc()
         .local()
         .format("YYYY/MM/DD_HH:mm");
+      // concert pop to percent.
+      const popPercent = h.pop * 100;
 
       return {
         dt: localTime,
         temp: h.temp,
-        pop: h.pop, // rainy percent
+        pop: popPercent, // rainy percent
       };
     });
 
@@ -80,7 +82,6 @@ export default class Weather {
 
     // calc max pop.
     const maxPop = _hourly.sort(this.comparePop)[0]["pop"];
-    console.log(maxPop);
     return maxPop;
   }
 
