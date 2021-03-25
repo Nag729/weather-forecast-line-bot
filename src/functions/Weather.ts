@@ -61,7 +61,7 @@ export default class Weather {
         .local()
         .format("YYYY/MM/DD_HH:mm");
       // concert pop to percent.
-      const popPercent = h.pop * 100;
+      const popPercent = Math.round(h.pop * 100);
 
       return {
         dt: localTime,
