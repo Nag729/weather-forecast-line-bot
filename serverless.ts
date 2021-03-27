@@ -6,6 +6,7 @@ import type { AWS } from "@serverless/typescript";
 const serverlessConfiguration: AWS = {
   service: "weather-forecast-line-bot",
   frameworkVersion: "2",
+  useDotenv: true,
   // custom
   custom: {
     webpack: {
@@ -14,7 +15,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // plugins
-  plugins: ["serverless-webpack"],
+  plugins: ["serverless-webpack", "serverless-dotenv-plugin"],
   // provider
   provider: {
     name: "aws",
@@ -27,16 +28,6 @@ const serverlessConfiguration: AWS = {
     iam: {
       role:
         "arn:aws:iam::435415521124:role/lambda-weather-forecast-line-bot-role",
-    },
-    environment: {
-      TZ: "Asia/Tokyo",
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
-      MY_AWS_REGION: "ap-northeast-1",
-      ONE_CALL_API_KEY: "82db215e674bdd250b933ebf63f827f7",
-      LINE_CHANNEL_ACCESS_TOKEN:
-        "9BtOdCQ0rvijwAUUNDZRsM+AZqwH7dyJKs+aw1l0ZaEHQOAkLTNdDCSv+7yZUTin8PQ9vZ5lFMtiFWhAcaVY1DBbA9KJ3txpa965tun6PO9luUd/qjW4H5Umz2+0ITq8aVI12pDkFCg4YOTQq8R9OAdB04t89/1O/w1cDnyilFU=",
-      MEASUREMENT_LATITUDE: "35.62913147168608", // latitude of Shinagawa-Station
-      MEASUREMENT_LONGITUDE: "139.73877832237912", // longitude of Shinagawa-Station
     },
     lambdaHashingVersion: "20201221",
   },
