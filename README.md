@@ -5,7 +5,7 @@
 
 ## LINE QR Code for register.
 
-![QRコード](./assets/line-qr-code.png)
+<img src="./assets/line-qr-code.png" width="600">
 
 <details><summary>`aws-nodejs-typescript` template's README</summary><div>
 
