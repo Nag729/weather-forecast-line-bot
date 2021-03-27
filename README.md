@@ -1,3 +1,14 @@
+# weather-forecast-line-bot
+
+- A LINE bot which notify today's weather.
+- Details: https://www.notion.so/weather-forecast-line-bot-115d087ca70e406aa7dc48eb3ead5b77
+
+## LINE QR Code for register.
+
+![QRコード](./assets/line-qr-code.png)
+
+<details><summary>`aws-nodejs-typescript` template's README</summary><div>
+
 # Serverless - AWS Node.js Typescript
 
 This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/).
@@ -93,3 +104,5 @@ The project code base is mainly located within the `src` folder. This folder is 
 ### Advanced usage
 
 Any tsconfig.json can be used, but if you do, set the environment variable `TS_NODE_CONFIG` for building the application, eg `TS_NODE_CONFIG=./tsconfig.app.json npx serverless webpack`
+
+</div></details>
