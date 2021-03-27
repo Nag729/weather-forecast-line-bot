@@ -5,7 +5,7 @@
 
 ## LINE QR Code for register.
 
-<img src="./assets/line-qr-code.png" width="600">
+<img src="./assets/line-qr-code.png" width="200">
 
 ---
 
