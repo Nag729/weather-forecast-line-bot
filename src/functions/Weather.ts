@@ -60,7 +60,7 @@ export default class Weather {
         .utc()
         .local()
         .format("YYYY/MM/DD_HH:mm");
-      // concert pop to percent.
+      // convert pop to 100 percentage notation.
       const popPercent = Math.round(h.pop * 100);
 
       return {
@@ -116,7 +116,7 @@ export default class Weather {
       notifyMessage = `今日は雨なので諦めておうちで過ごそう☔️`;
     }
 
-    notifyMessage += ` #最大降水確率は ${maxPop} %`;
+    notifyMessage += ` #最大降水確率は${maxPop}%`;
     return notifyMessage;
   }
 }
