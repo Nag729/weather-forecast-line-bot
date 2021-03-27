@@ -7,7 +7,9 @@
 
 <img src="./assets/line-qr-code.png" width="600">
 
-<details><summary>`aws-nodejs-typescript` template's README</summary><div>
+---
+
+<details><summary>aws-nodejs-typescript template's README</summary><div>
 
 # Serverless - AWS Node.js Typescript
 
