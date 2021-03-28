@@ -1,6 +1,6 @@
+import fetchWeather from "@functions/fetch-weather";
 import hello from "@functions/hello";
 import notifyLine from "@functions/notify-line";
-import receiveWeatherInfo from "@functions/receive-weather-info";
 import type { AWS } from "@serverless/typescript";
 
 const serverlessConfiguration: AWS = {
@@ -32,7 +32,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: "20201221",
   },
   // functions
-  functions: { hello, notifyLine, receiveWeatherInfo },
+  functions: { fetchWeather, hello, notifyLine },
   // resources
   resources: {
     Resources: {

@@ -7,7 +7,7 @@
       "name": "Serverless",
       "program": "${workspaceFolder}/node_modules/.bin/sls",
       "cwd": "${workspaceFolder}",
-      "args": ["invoke", "local", "-f", "receiveWeatherInfo", "--data", "{}"],
+      "args": ["invoke", "local", "-f", "fetchWeather", "--data", "{}"],
       "outFiles": ["${workspaceRoot}/.webpack/service/*"],
       "sourceMaps": true,
       "smartStep": true

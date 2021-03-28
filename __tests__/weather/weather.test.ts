@@ -1,18 +1,18 @@
 import axios from "axios";
-import mock from "../../src/functions/receive-weather-info/mock.json";
+import mock from "../../src/functions/fetch-weather/mock.json";
 import Weather from "../../src/functions/Weather";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-const weather = new Weather();
-
 test("weather : connection check", async () => {
+  const weather = new Weather();
+
   const res = { data: mock };
   mockedAxios.get.mockResolvedValue(res);
 
   const dummy = "dummyStr";
-  const data = await weather.receive(dummy, dummy, dummy);
+  const data = await weather.fetch(dummy, dummy, dummy);
 
   const expected = {
     hourly: [

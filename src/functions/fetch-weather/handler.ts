@@ -1,6 +1,6 @@
 import { middyfy } from "@libs/lambda";
 import "source-map-support/register";
-import Weather from "./../Weather";
+import Weather from "../Weather";
 
 const AWS = require("aws-sdk");
 AWS.config.update({ region: process.env.MY_AWS_REGION });
@@ -13,7 +13,7 @@ const handler = async () => {
   const lat = process.env.MEASUREMENT_LATITUDE;
   const lon = process.env.MEASUREMENT_LONGITUDE;
 
-  const data = await weather.receive(apiKey, lat, lon);
+  const data = await weather.fetch(apiKey, lat, lon);
   const hourly = data.hourly;
 
   // put WeatherHourly to DynamoDB
@@ -39,7 +39,7 @@ const handler = async () => {
     }
   });
 
-  return `receiveWeatherInfo - completed.`;
+  return `fetchWeather - completed.`;
 };
 
 export const main = middyfy(handler);

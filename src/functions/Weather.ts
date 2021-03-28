@@ -15,14 +15,13 @@ import { Hourly, WeatherInfo } from "./../../types/Weather";
 
 export default class Weather {
   /**
-   * receive weather info from One Call API.
+   * fetch weather information from One Call API.
    */
-  public async receive(
+  public async fetch(
     apiKey: string,
     latitude: string,
     longitude: string
   ): Promise<WeatherInfo> {
-    // receive weather information from OpenWeather One Call API.
     // https://openweathermap.org/api/one-call-api
     const url = "https://api.openweathermap.org/data/2.5/onecall";
     const params = {
