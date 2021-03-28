@@ -88,15 +88,16 @@ export default class Weather {
    * compare function for Hourly pop.
    */
   private comparePop(x, y) {
+    let val = 0;
     const popX = x.pop;
     const popY = y.pop;
 
     if (popX > popY) {
-      return -1;
+      val = -1;
     } else if (popX < popY) {
-      return 1;
+      val = 1;
     }
-    return 0;
+    return val;
   }
 
   /**
