@@ -1,4 +1,5 @@
 import { middyfy } from "@libs/lambda";
+import { ScheduledHandler } from "aws-lambda";
 import "source-map-support/register";
 import Weather from "../Weather";
 
@@ -8,7 +9,7 @@ const docCLI = new AWS.DynamoDB.DocumentClient();
 
 const weather = new Weather();
 
-const handler = async () => {
+const handler: ScheduledHandler = async () => {
   const apiKey = process.env.ONE_CALL_API_KEY;
   const lat = process.env.MEASUREMENT_LATITUDE;
   const lon = process.env.MEASUREMENT_LONGITUDE;
@@ -39,7 +40,7 @@ const handler = async () => {
     }
   });
 
-  return `fetchWeather - completed.`;
+  console.log(`fetchWeather - completed.`);
 };
 
 export const main = middyfy(handler);

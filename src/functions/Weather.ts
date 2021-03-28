@@ -52,7 +52,7 @@ export default class Weather {
 
     // arrange hourly response.
     // only use first 15 data to forecast today's weather.
-    const arrangedHourly = hourly.slice(0, 15).map((h) => {
+    const arrangedHourly: Hourly[] = hourly.slice(0, 15).map((h) => {
       // parse UTC to local datetime.
       const localTime = dayjs
         .unix(h.dt)

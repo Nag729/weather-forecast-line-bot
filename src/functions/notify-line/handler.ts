@@ -1,4 +1,5 @@
 import { middyfy } from "@libs/lambda";
+import { DynamoDBStreamEvent, DynamoDBStreamHandler } from "aws-lambda";
 import axios from "axios";
 import "source-map-support/register";
 import Weather from "../Weather";
@@ -6,7 +7,7 @@ import { Hourly } from "./../../../types/Weather";
 
 const weather = new Weather();
 
-const handler = async (event) => {
+const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent) => {
   // convert value from DynamoDB stream.
   const records = event.Records;
   const newImages: Hourly[] = records
@@ -14,7 +15,7 @@ const handler = async (event) => {
     .map((record) => record.dynamodb.NewImage)
     .map((image) => {
       // convert type of value.
-      const columns = {};
+      const columns: Hourly = {};
       for (const [key, value] of Object.entries(image)) {
         if (value.hasOwnProperty("N")) columns[key] = Number(value["N"]);
         else columns[key] = value["S"];
@@ -23,7 +24,8 @@ const handler = async (event) => {
     });
 
   if (!newImages || newImages.length === 0) {
-    return `DynamoDB stream does not contain assumed INSERT data.`;
+    console.log(`DynamoDB stream does not contain assumed INSERT data.`);
+    return;
   }
 
   // judge if you notify LINE.
@@ -32,7 +34,7 @@ const handler = async (event) => {
 
   // sending message to LINE.
   await pushMessageToLINE(notifyMessage);
-  return `notifyLine - completed.`;
+  console.log(`notifyLine - completed.`);
 };
 
 const pushMessageToLINE = async (notifyMessage: string): Promise<void> => {
