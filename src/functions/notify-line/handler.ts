@@ -1,5 +1,5 @@
 import { middyfy } from "@libs/lambda";
-import { DynamoDBStreamEvent, DynamoDBStreamHandler } from "aws-lambda";
+import { DynamoDBStreamHandler } from "aws-lambda";
 import axios from "axios";
 import "source-map-support/register";
 import Weather from "../Weather";
@@ -7,7 +7,7 @@ import { Hourly } from "./../../../types/Weather";
 
 const weather = new Weather();
 
-const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent) => {
+const handler: DynamoDBStreamHandler = async (event) => {
   // convert value from DynamoDB stream.
   const records = event.Records;
   const newImages: Hourly[] = records
