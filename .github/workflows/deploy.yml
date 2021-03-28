@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - "src/**"
+      - ".github/**"
 
 jobs:
   deploy:
@@ -37,7 +38,7 @@ jobs:
           cat .env
 
       - name: Run Jest
-        run: npx jest --coverage
+        run: npm run test
 
       - name: Deploy to Lambda
         run: sls deploy
