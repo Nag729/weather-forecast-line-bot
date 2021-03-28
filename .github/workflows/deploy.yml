@@ -36,6 +36,9 @@ jobs:
           echo MEASUREMENT_LONGITUDE=${{ secrets.MEASUREMENT_LONGITUDE }} >> .env
           cat .env
 
+      - name: Run Jest
+        run: npx jest --coverage
+
       - name: Deploy to Lambda
         run: sls deploy
         env:
