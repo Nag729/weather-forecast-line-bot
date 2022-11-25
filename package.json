@@ -12,11 +12,11 @@
     "node": ">=14.15.0"
   },
   "dependencies": {
-    "@line/bot-sdk": "^7.2.0",
+    "@line/bot-sdk": "^7.5.2",
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
     "aws-sdk": "^2.869.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "dayjs": "^1.10.4",
     "dayjs-plugin-utc": "^0.1.2",
     "lodash.clonedeep": "^4.5.0",
