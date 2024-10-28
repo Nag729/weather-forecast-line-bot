@@ -28,13 +28,7 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo TZ=${{ secrets.TZ }} >> .env
-          echo AWS_NODEJS_CONNECTION_REUSE_ENABLED=${{ secrets.AWS_NODEJS_CONNECTION_REUSE_ENABLED }} >> .env
-          echo MY_AWS_REGION=${{ secrets.MY_AWS_REGION }} >> .env
-          echo ONE_CALL_API_KEY=${{ secrets.ONE_CALL_API_KEY }} >> .env
           echo LINE_CHANNEL_ACCESS_TOKEN=${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }} >> .env
-          echo MEASUREMENT_LATITUDE=${{ secrets.MEASUREMENT_LATITUDE }} >> .env
-          echo MEASUREMENT_LONGITUDE=${{ secrets.MEASUREMENT_LONGITUDE }} >> .env
           cat .env
 
       - name: Run Jest
