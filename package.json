@@ -7,7 +7,7 @@
     "deploy": "sls deploy",
     "remove": "sls remove",
     "invoke:fetchWeather": "sls invoke -f fetchWeather",
-    "test": "TZ=Asia/Tokyo jest --coverage"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@line/bot-sdk": "^7.7.0",
@@ -15,9 +15,6 @@
     "@middy/http-json-body-parser": "^1.5.2",
     "aws-sdk": "^2.1691.0",
     "axios": "^1.7.7",
-    "dayjs": "^1.11.13",
-    "dayjs-plugin-utc": "^0.1.2",
-    "lodash.clonedeep": "^4.5.0",
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
