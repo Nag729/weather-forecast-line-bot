@@ -11,14 +11,14 @@ on:
 jobs:
   deploy:
     name: Auto Deploy
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
-          node-version: "14.x"
+          node-version: "20"
 
       - name: Install Dependencies
         run: |
