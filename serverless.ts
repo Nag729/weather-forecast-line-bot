@@ -1,5 +1,4 @@
 import fetchWeather from "@functions/fetch-weather";
-import notifyLine from "@functions/notify-line";
 import type { AWS } from "@serverless/typescript";
 
 const serverlessConfiguration: AWS = {
@@ -32,38 +31,6 @@ const serverlessConfiguration: AWS = {
   // functions
   functions: {
     fetchWeather,
-    notifyLine,
-  },
-  // resources
-  resources: {
-    Resources: {
-      usersTable: {
-        // DynamoDB for weatherHourlyInfo
-        Type: "AWS::DynamoDB::Table",
-        Properties: {
-          TableName: "weatherHourlyTable",
-          AttributeDefinitions: [
-            {
-              AttributeName: "dt",
-              AttributeType: "S",
-            },
-          ],
-          KeySchema: [
-            {
-              AttributeName: "dt",
-              KeyType: "HASH",
-            },
-          ],
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 1,
-            WriteCapacityUnits: 1,
-          },
-          StreamSpecification: {
-            StreamViewType: "NEW_IMAGE",
-          },
-        },
-      },
-    },
   },
 };
 
