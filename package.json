@@ -6,7 +6,6 @@
   "scripts": {
     "deploy": "sls deploy",
     "remove": "sls remove",
-    "invoke:hello": "sls invoke -f hello -p src/functions/hello/mock.json",
     "invoke:fetchWeather": "sls invoke -f fetchWeather",
     "test": "TZ=Asia/Tokyo jest --coverage"
   },
