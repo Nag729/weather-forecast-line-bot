@@ -18,7 +18,7 @@ export default class WeatherMessageCreator {
   }
 
   private formatText(text: string): string {
-    return text.replace(/\s/g, "");
+    return text.replace(/　/g, "");
   }
 
   private calculateMaxChanceOfRain(weather: Weather): number {
