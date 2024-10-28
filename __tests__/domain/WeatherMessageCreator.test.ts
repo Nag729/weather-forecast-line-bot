@@ -1,5 +1,5 @@
-import WeatherMessageCreator from "../src/functions/WeatherMessageCreator";
-import { Weather } from "../types/Weather";
+import WeatherMessageCreator from "../../src/domain/WeatherMessageCreator";
+import { Weather } from "../../types/Weather";
 
 const DUMMY_RESPONSE = {
   title: "愛知県 名古屋 の天気",

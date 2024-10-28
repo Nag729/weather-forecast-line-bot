@@ -2,7 +2,7 @@ import { middyfy } from "@libs/lambda";
 import { ScheduledHandler } from "aws-lambda";
 import axios from "axios";
 import { Weather } from "types/Weather";
-import WeatherMessageCreator from "../WeatherMessageCreator";
+import WeatherMessageCreator from "../../domain/WeatherMessageCreator";
 
 const weatherMessageCreator = new WeatherMessageCreator();
 
