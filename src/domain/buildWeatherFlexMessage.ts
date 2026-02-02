@@ -1,5 +1,9 @@
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
+import { FlexBox, FlexBubble, FlexMessage, FlexText } from "types/FlexMessage";
 import { Forecast } from "types/Weather";
-import { FlexBubble, FlexBox, FlexMessage, FlexText } from "types/FlexMessage";
+
+dayjs.locale("ja");
 
 export interface WeatherFlexMessageParams {
   title: string;
@@ -38,9 +42,7 @@ function buildBubble(
 }
 
 function buildHeader(title: string): FlexBox {
-  const today = new Date();
-  const dayOfWeek = ["日", "月", "火", "水", "木", "金", "土"][today.getDay()];
-  const dateStr = `${today.getMonth() + 1}/${today.getDate()}（${dayOfWeek}）`;
+  const dateStr = dayjs().format("M/D（ddd）");
   const location = title.replace("愛知県 ", "").replace(" の天気", "");
 
   return {
@@ -102,21 +104,49 @@ function buildBody(forecast: Forecast): FlexBox {
 
 function buildFooter(advice: string): FlexBox {
   const lines = advice.split("\n").filter((line) => line.trim());
+  const practicalLines = lines.slice(0, 2); // 服装・洗濯
+  const funLines = lines.slice(2); // おすすめ行動・豆知識
+
+  const practicalTexts = practicalLines.map(
+    (line): FlexText => ({
+      type: "text",
+      text: line,
+      size: "sm",
+      color: "#555555",
+      wrap: true,
+    })
+  );
+
+  const funTexts = funLines.map(
+    (line): FlexText => ({
+      type: "text",
+      text: line,
+      size: "sm",
+      color: "#555555",
+      wrap: true,
+    })
+  );
 
   return {
     type: "box",
     layout: "vertical",
-    contents: lines.map(
-      (line): FlexText => ({
-        type: "text",
-        text: line,
-        size: "sm",
-        color: "#555555",
-        wrap: true,
-      })
-    ),
+    contents: [
+      {
+        type: "box",
+        layout: "vertical",
+        contents: practicalTexts,
+        spacing: "xs",
+      },
+      { type: "separator", margin: "md" },
+      {
+        type: "box",
+        layout: "vertical",
+        contents: funTexts,
+        spacing: "xs",
+        margin: "md",
+      },
+    ],
     paddingAll: "15px",
-    spacing: "xs",
   };
 }
 
@@ -164,9 +194,13 @@ function formatChanceOfRain(chanceOfRain: {
   const validSlots = slots.filter((s) => s.value !== "--%");
 
   if (validSlots.length === 0) {
-    return [{ type: "text", text: "☂️ 降水確率: --", size: "sm", color: "#666666" }];
+    return [
+      { type: "text", text: "☂️ 降水確率: --", size: "sm", color: "#666666" },
+    ];
   }
 
   const rainText = validSlots.map((s) => `${s.label}: ${s.value}`).join(" | ");
-  return [{ type: "text", text: `☂️ ${rainText}`, size: "sm", color: "#666666" }];
+  return [
+    { type: "text", text: `☂️ ${rainText}`, size: "sm", color: "#666666" },
+  ];
 }

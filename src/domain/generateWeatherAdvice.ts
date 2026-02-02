@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import dayjs from "dayjs";
 import { Forecast, Weather } from "types/Weather";
 
 const anthropic = new Anthropic();
@@ -30,10 +31,14 @@ export async function generateWeatherAdvice(
 function buildPrompt(weather: Weather, forecast: Forecast): string {
   const rainInfo = formatRainProbability(forecast);
 
+  const today = dayjs();
+  const dateStr = today.format("M月D日");
+
   return `あなたは毎朝の天気予報を届ける親しみやすいアシスタントです。
-以下の天気情報を分析し、実用的なアドバイスを3行で教えてください。
+以下の天気情報を分析し、4行のアドバイスを教えてください。
 
 ## 天気データ
+- 日付: ${dateStr}
 - 地域: ${weather.title}
 - 天気: ${forecast.telop}
 - 詳細: ${forecast.detail.weather}
@@ -48,9 +53,10 @@ ${weather.description.text}
 ## 出力ルール
 - 1行目: 👕 服装アドバイス（気温・天気変化を考慮）
 - 2行目: 🧺 洗濯アドバイス（降水確率・時間帯を考慮）
-- 3行目: 💡 その日を快適に過ごすためのワンポイント
+- 3行目: 🏃 今日の天気に合ったおすすめ行動（具体的に）
+- 4行目: 📚 季節・暦・雑学などの豆知識（今日の日付や季節に関連）
 
-各行は20文字以内で、親しみやすい口調で。絵文字は行頭のみ使用。`;
+各行は25文字以内で、親しみやすい口調で。絵文字は行頭のみ使用。`;
 }
 
 function formatRainProbability(forecast: Forecast): string {
@@ -69,10 +75,10 @@ function formatRainProbability(forecast: Forecast): string {
 
 function getFallbackAdvice(telop: string): string {
   if (telop.includes("雨") || telop.includes("雪")) {
-    return "👕 防水・防寒対策をしっかりと\n🧺 今日は部屋干しがおすすめ\n💡 折りたたみ傘を忘れずに";
+    return "👕 防水・防寒対策をしっかりと\n🧺 今日は部屋干しがおすすめ\n🏃 おうちでストレッチがおすすめ\n📚 雨の日は読書がはかどる";
   }
   if (telop.includes("曇")) {
-    return "👕 羽織れるものがあると安心\n🧺 午前中の洗濯がおすすめ\n💡 急な雨に備えて傘があると◎";
+    return "👕 羽織れるものがあると安心\n🧺 午前中の洗濯がおすすめ\n🏃 カフェでゆっくり過ごすのも◎\n📚 曇りの日は集中力が上がるらしい";
   }
-  return "👕 気温に合わせた服装で\n🧺 洗濯日和かも！\n💡 水分補給を忘れずに";
+  return "👕 気温に合わせた服装で\n🧺 洗濯日和かも！\n🏃 散歩や外出にぴったりの日\n📚 晴れの日はビタミンD生成のチャンス";
 }
