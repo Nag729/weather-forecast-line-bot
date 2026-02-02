@@ -10,8 +10,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@middy/core": "^6.4.5",
-    "@middy/http-json-body-parser": "^6.4.5",
+    "@anthropic-ai/sdk": "^0.72.1",
     "axios": "^1.13.4",
     "source-map-support": "^0.5.21"
   },

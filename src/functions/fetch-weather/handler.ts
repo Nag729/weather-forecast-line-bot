@@ -1,57 +1,59 @@
-import { middyfy } from "@libs/lambda";
 import { ScheduledHandler } from "aws-lambda";
 import axios from "axios";
 import { Weather } from "types/Weather";
-import WeatherMessageCreator from "../../domain/WeatherMessageCreator";
-
-const weatherMessageCreator = new WeatherMessageCreator();
+import { FlexMessage } from "types/FlexMessage";
+import { generateWeatherAdvice } from "../../domain/generateWeatherAdvice";
+import { buildWeatherFlexMessage } from "../../domain/buildWeatherFlexMessage";
 
 const handler: ScheduledHandler = async () => {
-  // fetch weather.
   const weather = await fetchWeather();
-  console.info(`[Done] fetchWeather`);
-  console.info(weather);
+  console.info("[Done] fetchWeather");
 
-  // create message for LINE.
-  const notifyMessage = weatherMessageCreator.createNotifyMessage(weather);
-  console.info(`[Done] createNotifyMessage`);
-  console.info(notifyMessage);
+  const forecast = weather.forecasts.find((f) => f.dateLabel === "今日");
+  if (!forecast) {
+    throw new Error("Today's forecast not found");
+  }
 
-  // sending message to LINE.
-  await pushMessageToLINE(notifyMessage);
-  console.info(`[Done] pushMessageToLINE`);
+  const advice = await generateWeatherAdvice(weather, forecast);
+  console.info("[Done] generateWeatherAdvice");
 
-  console.info(`fetchWeather - completed.`);
+  const flexMessage = buildWeatherFlexMessage({
+    title: weather.title,
+    forecast,
+    advice,
+  });
+  console.info("[Done] buildWeatherFlexMessage");
+
+  await sendToLINE(flexMessage);
+  console.info("[Done] sendToLINE");
 };
 
-const fetchWeather = async (): Promise<Weather> => {
-  // https://weather.tsukumijima.net/
+async function fetchWeather(): Promise<Weather> {
   const url = "https://weather.tsukumijima.net/api/forecast/city/230010";
   const res = await axios.get<Weather>(url);
   return res.data;
-};
+}
 
-const pushMessageToLINE = async (notifyMessage: string): Promise<void> => {
-  const messages = [{ type: "text", text: notifyMessage }];
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + process.env.LINE_CHANNEL_ACCESS_TOKEN,
-  };
+async function sendToLINE(message: FlexMessage): Promise<void> {
+  const url = "https://api.line.me/v2/bot/message/broadcast";
 
-  // sending message to all friends using broadcast.
-  await axios
-    .request({
-      method: "post",
-      headers: headers,
-      url: "https://api.line.me/v2/bot/message/broadcast",
-      data: {
-        messages: messages,
-      },
-    })
-    .catch((err) => {
-      console.error(`Error has occured when sending message to LINE.`);
-      console.error(err.message);
-    });
-};
+  try {
+    await axios.post(
+      url,
+      { messages: [message] },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+        },
+      }
+    );
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      console.error("LINE API error:", err.response?.data ?? err.message);
+    }
+    throw err;
+  }
+}
 
-export const main = middyfy(handler);
+export const main = handler;
