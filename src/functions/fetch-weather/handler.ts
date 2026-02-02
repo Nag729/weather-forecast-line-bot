@@ -23,6 +23,7 @@ const handler: ScheduledHandler = async () => {
     advice,
   });
   console.info("[Done] buildWeatherFlexMessage");
+  console.info("flexMessage:", JSON.stringify(flexMessage, null, 2));
 
   await sendToLINE(flexMessage);
   console.info("[Done] sendToLINE");

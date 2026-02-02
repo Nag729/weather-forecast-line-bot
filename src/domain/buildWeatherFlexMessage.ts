@@ -146,7 +146,7 @@ function formatTemperature(temperature: {
   if (max.celsius && min.celsius) return `${max.celsius}℃ / ${min.celsius}℃`;
   if (max.celsius) return `最高 ${max.celsius}℃`;
   if (min.celsius) return `最低 ${min.celsius}℃`;
-  return "";
+  return "気温データなし";
 }
 
 function formatChanceOfRain(chanceOfRain: {
