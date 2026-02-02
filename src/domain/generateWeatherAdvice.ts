@@ -34,7 +34,7 @@ function buildPrompt(weather: Weather, forecast: Forecast): string {
   const today = dayjs();
   const dateStr = today.format("M月D日");
 
-  return `あなたは毎朝の天気予報を届ける親しみやすいアシスタントです。
+  return `あなたは毎朝の天気予報とひとことを届けるゆるく親しみやすいアシスタントです。
 以下の天気情報を分析し、4行のアドバイスを教えてください。
 
 ## 天気データ
@@ -51,12 +51,18 @@ function buildPrompt(weather: Weather, forecast: Forecast): string {
 ${weather.description.text}
 
 ## 出力ルール
-- 1行目: 👕 服装アドバイス（気温・天気変化を考慮）
-- 2行目: 🧺 洗濯アドバイス（降水確率・時間帯を考慮）
-- 3行目: 🏃 今日の天気に合ったおすすめ行動（具体的に）
-- 4行目: 📚 季節・暦・雑学などの豆知識（今日の日付や季節に関連）
+- 1行目: 👕 服装アドバイス（実用的）
+- 2行目: 🧺 洗濯アドバイス（実用的）
+- 3行目: 🎯 今日のゆるい提案（天気に合わせた癒し系の提案。毎日違う内容で）
+- 4行目: 💭 ひとこと（豆知識・小ネタ・ゆるいツッコミなど。クスッと笑えるユーモアを）
 
-各行は25文字以内で、親しみやすい口調で。絵文字は行頭のみ使用。`;
+## 3-4行目のネタの方向性（今日のデータに合わせて選んで）
+- ${dateStr}に関連する記念日・イベント
+- 今の季節の食べ物・風物詩
+- 今日の天気・気温あるある
+- ゆるい人生観・哲学っぽいひとこと
+
+各行は25文字以内。絵文字は行頭のみ使用。`;
 }
 
 function formatRainProbability(forecast: Forecast): string {
@@ -75,10 +81,10 @@ function formatRainProbability(forecast: Forecast): string {
 
 function getFallbackAdvice(telop: string): string {
   if (telop.includes("雨") || telop.includes("雪")) {
-    return "👕 防水・防寒対策をしっかりと\n🧺 今日は部屋干しがおすすめ\n🏃 おうちでストレッチがおすすめ\n📚 雨の日は読書がはかどる";
+    return "👕 防水対策しっかりね\n🧺 部屋干しの日\n🎯 Netflixでゴロゴロが正解\n💭 雨の音って意外と落ち着くよね";
   }
   if (telop.includes("曇")) {
-    return "👕 羽織れるものがあると安心\n🧺 午前中の洗濯がおすすめ\n🏃 カフェでゆっくり過ごすのも◎\n📚 曇りの日は集中力が上がるらしい";
+    return "👕 羽織れるものあると安心\n🧺 午前中に洗濯チャンス\n🎯 カフェでまったりもアリ\n💭 曇りの日のコーヒーは美味しい（気がする）";
   }
-  return "👕 気温に合わせた服装で\n🧺 洗濯日和かも！\n🏃 散歩や外出にぴったりの日\n📚 晴れの日はビタミンD生成のチャンス";
+  return "👕 気温に合わせてね\n🧺 洗濯日和！\n🎯 散歩とか気持ちよさそう\n💭 晴れてるだけで何か勝ってる気がする";
 }
