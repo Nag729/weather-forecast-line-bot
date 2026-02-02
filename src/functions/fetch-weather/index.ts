@@ -5,7 +5,7 @@ export default {
   timeout: 60,
   events: [
     {
-      schedule: "cron(30 0 * * ? *)", // Run at 09:30 JST (00:30 UTC) every day
+      schedule: "cron(0 13 * * ? *)", // Run at 22:00 JST (13:00 UTC) every day
     },
   ],
 };

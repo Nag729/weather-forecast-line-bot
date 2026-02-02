@@ -3,7 +3,7 @@ import { Forecast } from "types/Weather";
 
 const createForecast = (overrides: Partial<Forecast> = {}): Forecast => ({
   date: "2024-10-28",
-  dateLabel: "今日",
+  dateLabel: "明日",
   telop: "晴れ",
   detail: {
     weather: "晴れ　時々　くもり",

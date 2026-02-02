@@ -31,14 +31,14 @@ export async function generateWeatherAdvice(
 function buildPrompt(weather: Weather, forecast: Forecast): string {
   const rainInfo = formatRainProbability(forecast);
 
-  const today = dayjs();
-  const dateStr = today.format("M月D日");
+  const tomorrow = dayjs().add(1, "day");
+  const dateStr = tomorrow.format("M月D日");
 
-  return `あなたは毎朝の天気予報とひとことを届けるゆるく親しみやすいアシスタントです。
+  return `あなたは夜に明日の天気予報を届けるゆるく親しみやすいアシスタントです。
 以下の天気情報を分析し、4行のアドバイスを教えてください。
 
 ## 天気データ
-- 日付: ${dateStr}
+- 日付: ${dateStr}（明日）
 - 地域: ${weather.title}
 - 天気: ${forecast.telop}
 - 詳細: ${forecast.detail.weather}
@@ -53,13 +53,13 @@ ${weather.description.text}
 ## 出力ルール
 - 1行目: 👕 服装アドバイス（実用的）
 - 2行目: 🧺 洗濯アドバイス（実用的）
-- 3行目: 🎯 今日のゆるい提案（天気に合わせた癒し系の提案。毎日違う内容で）
+- 3行目: 🎯 明日のゆるい提案（天気に合わせた癒し系の提案）
 - 4行目: 💭 ひとこと（豆知識・小ネタ・ゆるいツッコミなど。クスッと笑えるユーモアを）
 
-## 3-4行目のネタの方向性（今日のデータに合わせて選んで）
+## 3-4行目のネタの方向性（明日のデータに合わせて選んで）
 - ${dateStr}に関連する記念日・イベント
 - 今の季節の食べ物・風物詩
-- 今日の天気・気温あるある
+- 明日の天気・気温あるある
 - ゆるい人生観・哲学っぽいひとこと
 
 各行は25文字以内。絵文字は行頭のみ使用。`;
@@ -81,10 +81,10 @@ function formatRainProbability(forecast: Forecast): string {
 
 function getFallbackAdvice(telop: string): string {
   if (telop.includes("雨") || telop.includes("雪")) {
-    return "👕 防水対策しっかりね\n🧺 部屋干しの日\n🎯 Netflixでゴロゴロが正解\n💭 雨の音って意外と落ち着くよね";
+    return "👕 防水対策の準備を\n🧺 明日は部屋干しかな\n🎯 おうちでまったりの日\n💭 雨の音って意外と落ち着くよね";
   }
   if (telop.includes("曇")) {
-    return "👕 羽織れるものあると安心\n🧺 午前中に洗濯チャンス\n🎯 カフェでまったりもアリ\n💭 曇りの日のコーヒーは美味しい（気がする）";
+    return "👕 羽織れるものあると安心\n🧺 午前中が洗濯チャンス\n🎯 カフェでまったりもアリ\n💭 曇りの日のコーヒーは美味しい（気がする）";
   }
-  return "👕 気温に合わせてね\n🧺 洗濯日和！\n🎯 散歩とか気持ちよさそう\n💭 晴れてるだけで何か勝ってる気がする";
+  return "👕 気温に合わせてね\n🧺 洗濯日和になりそう！\n🎯 散歩とか気持ちよさそう\n💭 晴れてるだけで何か勝ってる気がする";
 }

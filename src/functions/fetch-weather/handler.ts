@@ -9,9 +9,9 @@ const handler: ScheduledHandler = async () => {
   const weather = await fetchWeather();
   console.info("[Done] fetchWeather");
 
-  const forecast = weather.forecasts.find((f) => f.dateLabel === "今日");
+  const forecast = weather.forecasts.find((f) => f.dateLabel === "明日");
   if (!forecast) {
-    throw new Error("Today's forecast not found");
+    throw new Error("Tomorrow's forecast not found");
   }
 
   const advice = await generateWeatherAdvice(weather, forecast);
