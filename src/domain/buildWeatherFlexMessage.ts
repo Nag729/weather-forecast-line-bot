@@ -42,7 +42,7 @@ function buildBubble(
 }
 
 function buildHeader(title: string): FlexBox {
-  const dateStr = dayjs().format("M/D（ddd）");
+  const dateStr = dayjs().add(1, "day").format("M/D（ddd）");
   const location = title.replace("愛知県 ", "").replace(" の天気", "");
 
   return {
