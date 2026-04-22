@@ -42,3 +42,6 @@ _meta
 .serverless
 .webpack
 lib
+
+#CLAUDE CODE
+.claude
