@@ -35,10 +35,10 @@ const createForecast = (dateLabel: "今日" | "明日" | "明後日"): Forecast 
 });
 
 const mockWeatherResponse: Weather = {
-  title: "愛知県 名古屋 の天気",
+  title: "千葉県 千葉 の天気",
   publicTimeFormatted: "2026/02/02 17:00:00",
   description: {
-    text: "東海地方は晴れています。",
+    text: "関東地方は晴れています。",
   },
   forecasts: [
     createForecast("今日"),
@@ -67,7 +67,7 @@ describe("handler", () => {
     // Then
     // 天気APIが呼ばれること
     expect(mockedAxios.get).toHaveBeenCalledWith(
-      "https://weather.tsukumijima.net/api/forecast/city/230010"
+      "https://weather.tsukumijima.net/api/forecast/city/120010"
     );
 
     // 「明日」の予報でアドバイス生成が呼ばれること

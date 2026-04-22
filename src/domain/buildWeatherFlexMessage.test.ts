@@ -35,7 +35,7 @@ describe("buildWeatherFlexMessage", () => {
 
     // When
     const result = buildWeatherFlexMessage({
-      title: "愛知県 名古屋 の天気",
+      title: "千葉県 千葉 の天気",
       forecast,
       advice,
     });

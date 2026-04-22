@@ -30,7 +30,7 @@ const handler: ScheduledHandler = async () => {
 };
 
 async function fetchWeather(): Promise<Weather> {
-  const url = "https://weather.tsukumijima.net/api/forecast/city/230010";
+  const url = "https://weather.tsukumijima.net/api/forecast/city/120010";
   const res = await axios.get<Weather>(url);
   return res.data;
 }
