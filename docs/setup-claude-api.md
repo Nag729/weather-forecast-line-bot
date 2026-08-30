@@ -25,5 +25,5 @@ npm run invoke:fetchWeather
 
 ## 補足
 
-- 使用モデル: `claude-opus-4-20250514`
+- 使用モデル: `claude-opus-5`
 - 1日1回の実行で月額数ドル程度

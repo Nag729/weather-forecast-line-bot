@@ -2,7 +2,16 @@ import Anthropic from "@anthropic-ai/sdk";
 import dayjs from "dayjs";
 import { Forecast, Weather } from "types/Weather";
 
-const anthropic = new Anthropic();
+const MODEL = "claude-opus-5";
+
+const UNAVAILABLE_MESSAGE = "⚠️ アドバイスを取得できませんでした";
+
+/** SDK v0.122 は生成時に認証情報を解決するため、実行時まで遅延させる */
+let client: Anthropic | undefined;
+
+function getClient(): Anthropic {
+  return (client ??= new Anthropic());
+}
 
 export async function generateWeatherAdvice(
   weather: Weather,
@@ -11,20 +20,29 @@ export async function generateWeatherAdvice(
   try {
     const prompt = buildPrompt(weather, forecast);
 
-    const response = await anthropic.messages.create({
-      model: "claude-opus-4-20250514",
+    const response = await getClient().messages.create({
+      model: MODEL,
       max_tokens: 300,
+      temperature: 1,
       messages: [{ role: "user", content: prompt }],
     });
 
     const content = response.content[0];
-    if (content.type === "text") {
-      return content.text.trim();
+    if (content.type !== "text") {
+      console.error("Unexpected Claude response block type:", content.type);
+      return UNAVAILABLE_MESSAGE;
     }
-    return getFallbackAdvice(forecast.telop);
+
+    const advice = content.text.trim();
+    if (!advice) {
+      console.error("Claude returned an empty advice text");
+      return UNAVAILABLE_MESSAGE;
+    }
+
+    return advice;
   } catch (error) {
     console.error("Claude API error:", error);
-    return getFallbackAdvice(forecast.telop);
+    return UNAVAILABLE_MESSAGE;
   }
 }
 
@@ -62,7 +80,10 @@ ${weather.description.text}
 - 明日の天気・気温あるある
 - ゆるい人生観・哲学っぽいひとこと
 
-各行は25文字以内。絵文字は行頭のみ使用。`;
+## 表現のルール
+- 各行は25文字以内。絵文字は行頭のみ使用。
+- 定型句や毎回言いがちな言い回しは避け、今日ならではの言葉を選ぶこと。
+- 前置きや解説は不要。4行だけを出力すること。`;
 }
 
 function formatRainProbability(forecast: Forecast): string {
@@ -77,14 +98,4 @@ function formatRainProbability(forecast: Forecast): string {
   if (validSlots.length === 0) return "データなし";
 
   return validSlots.map((s) => `${s.time}: ${s.value}`).join(", ");
-}
-
-function getFallbackAdvice(telop: string): string {
-  if (telop.includes("雨") || telop.includes("雪")) {
-    return "👕 防水対策の準備を\n🧺 明日は部屋干しかな\n🎯 おうちでまったりの日\n💭 雨の音って意外と落ち着くよね";
-  }
-  if (telop.includes("曇")) {
-    return "👕 羽織れるものあると安心\n🧺 午前中が洗濯チャンス\n🎯 カフェでまったりもアリ\n💭 曇りの日のコーヒーは美味しい（気がする）";
-  }
-  return "👕 気温に合わせてね\n🧺 洗濯日和になりそう！\n🎯 散歩とか気持ちよさそう\n💭 晴れてるだけで何か勝ってる気がする";
 }
